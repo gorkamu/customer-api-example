@@ -14,15 +14,16 @@ This API manages customers and their credit.
   - [Delete customer](#delete-customer)
   - [Add credit](#add-credit)
 - [Testing](#testing)
-  - [Code coverage](#code-coverage) 
+  - [Code coverage](#code-coverage)
+  - [CI](#ci)
 - [Deploy](#deploy)
 
 ## Requirements
 - Node.js >= 18.18.2
 - npm >= 9.8.1
 - MongoDB >= 7.0.8
-- Docker (optional) >= 24.0.7
-- Docker Compose (optional) >= 1.29.2,
+- Docker >= 24.0.7 (optional)
+- Docker Compose >= 1.29.2 (optional)
 - make (optional) >= 4.3
 
 ## Installation

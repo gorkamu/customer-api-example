@@ -24,6 +24,9 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: List files
+        run: ls -la /home/runner/work/customer-api-example/customer-api-example/
+
       - name: Get Node version from package.json
         id: get-versions
         run: echo ::set-output name=node::$(jq -r .engines.node ./package.json)

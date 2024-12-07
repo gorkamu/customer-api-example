@@ -1,4 +1,8 @@
 # Customer's API
+
+[![Continuous Integration](https://github.com/gorkamu/customer-api-example/actions/workflows/ci.yml/badge.svg)](https://github.com/gorkamu/customer-api-example/actions/workflows/ci.yml)
+
+
 This API manages customers and their credit.
 
 ## Table of contents

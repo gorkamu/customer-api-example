@@ -134,6 +134,9 @@ jobs:
       - name: Installing project dependencies
         run: npm ci
 
+      - name: Run json analysis
+        run: npm run test:cov:json
+
       - name: Check coverage
         id: check-coverage
         run: |

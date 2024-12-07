@@ -1,0 +1,74 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches:
+      - 'main'
+      - 'release'
+  pull_request:
+    types: [ opened, reopened, synchronize, ready_for_review ]
+    branches:
+      - 'develop'
+      - 'release'
+
+jobs:
+  build-and-test:
+    if: '! github.event.pull_request.draft'
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Config GIT
+        run: git config --global url."https://${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+
+      - name: Get Node version from package.json
+        id: get-versions
+        run: echo ::set-output name=node::$(jq -r .engines.node ./package.json)
+
+      - name: Use Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: Installing project dependencies
+        run: npm ci
+
+      - name: Get branch name
+        id: branch-name
+        uses: tj-actions/branch-names@v6
+
+      - name: Getting environment file
+        uses: canastro/copy-file-action@master
+        with:
+          source: ./config/env/.env.dist
+          target: './.env'
+
+      - name: Build project
+        run: npm run build
+
+      - name: Running tests
+        run: npm run test
+
+      - name: Running code coverage
+        run: npm run test:cov:json
+
+      - name: Check coverage
+        id: check-coverage
+        run: |
+          COVERAGE=$(cat coverage/coverage-summary.json | jq '.total')
+          LINES=$(echo $COVERAGE | jq '.lines.pct')
+          FUNCTIONS=$(echo $COVERAGE | jq '.functions.pct')
+          STATEMENTS=$(echo $COVERAGE | jq '.statements.pct')
+          BRANCHES=$(echo $COVERAGE | jq '.branches.pct')
+          AVERAGE=$(echo "($LINES + $FUNCTIONS + $STATEMENTS + $BRANCHES) / 4" | bc -l)
+          echo "Average coverage: $AVERAGE"
+          if (( $(echo "$AVERAGE < 60" | bc -l) )); then
+            echo "Coverage is below 60%"
+            exit 1
+          fi

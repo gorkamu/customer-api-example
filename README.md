@@ -213,5 +213,16 @@ npm run test:cov:json
 ```
 
 ### CI
+![CI](./docs/ci.jpg)
+
+- **Setup**: Configures the execution environment, including Git setup, code checkout, dependency installation, and obtaining necessary environment files.
+- **Build**: Compiles the project to ensure the source code is converted into an executable format.
+- **Test and Coverage**: Runs the project's tests and performs code coverage analysis to ensure code quality.
+- **Check Coverage**: Verifies that the code coverage meets the minimum threshold, ensuring the code is sufficiently tested.
+  
+
+You can view both the pipeline and the latest executions here:
+https://github.com/gorkamu/customer-api-example/actions
+
 
 ## Deploy

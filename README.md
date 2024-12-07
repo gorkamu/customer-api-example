@@ -1,6 +1,7 @@
 # Customer's API
 
 [![Continuous Integration](https://github.com/gorkamu/customer-api-example/actions/workflows/ci.yml/badge.svg)](https://github.com/gorkamu/customer-api-example/actions/workflows/ci.yml)
+[![Continuous coverage](https://img.shields.io/badge/Coverage-67.00%25-brightgreen)](https://github.com/gorkamu/customer-api-example/actions/workflows/ci.yml)
 
 
 This API manages customers and their credit.

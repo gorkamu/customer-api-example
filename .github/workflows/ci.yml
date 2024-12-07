@@ -51,8 +51,40 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    needs: setup
     steps:
+      - name: Config GIT
+        run: git config --global url."https://${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+
+      - name: List files
+        run: ls -la /home/runner/work/customer-api-example/customer-api-example/
+
+      - name: Get Node version from package.json
+        id: get-versions
+        run: echo ::set-output name=node::$(jq -r .engines.node ./package.json)
+
+      - name: Use Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: Installing project dependencies
+        run: npm ci
+
+      - name: Get branch name
+        id: branch-name
+        uses: tj-actions/branch-names@v6
+
+      - name: Getting environment file
+        uses: canastro/copy-file-action@master
+        with:
+          source: ./config/env/.env.dist
+          target: './.env'
+
       - name: Build project
         run: npm run build
 
@@ -61,7 +93,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-        job: [test, coverage]
+        job: [ test, coverage ]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
